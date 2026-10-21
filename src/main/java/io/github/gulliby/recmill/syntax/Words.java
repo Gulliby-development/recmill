@@ -30,6 +30,8 @@ public final class Words {
                 index++;
             } else if (isSeparator(character)) {
                 finishWord(word, entry, entries);
+            } else if ((character == '\'' || character == '"') && word.length() == 0) {
+                index = readLiteral(text, index, word, entries.size() + 1);
             } else {
                 word.append(character);
             }
@@ -43,6 +45,24 @@ public final class Words {
             throw new Failure("layout is empty");
         }
         return entries;
+    }
+
+    private static int readLiteral(String text, int start, StringBuilder word, int entryNumber) {
+        char quote = text.charAt(start);
+        word.append(quote);
+        for (int index = start + 1; index < text.length(); index++) {
+            char character = text.charAt(index);
+            word.append(character);
+            if (character == quote) {
+                if (index + 1 < text.length() && text.charAt(index + 1) == quote) {
+                    word.append(quote);
+                    index++;
+                } else {
+                    return index;
+                }
+            }
+        }
+        throw new Failure("entry " + entryNumber + ": unterminated literal");
     }
 
     private static void finishWord(StringBuilder word, List<String> entry, List<List<String>> entries) {

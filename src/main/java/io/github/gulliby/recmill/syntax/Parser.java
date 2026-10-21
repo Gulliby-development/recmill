@@ -42,6 +42,8 @@ public final class Parser {
         boolean sawPic = false;
         boolean sawOccurs = false;
         boolean sawRedefines = false;
+        boolean sawUsage = false;
+        boolean sawValue = false;
 
         int position = 2;
         while (position < words.size()) {
@@ -92,12 +94,73 @@ public final class Parser {
                 }
                 redefines = Text.upper(targetWord);
                 position++;
+            } else if (normalized.equals("USAGE") || normalized.equals("DISPLAY")) {
+                if (sawUsage) {
+                    throw unexpected(index, keyword);
+                }
+                sawUsage = true;
+                position++;
+
+                if (normalized.equals("USAGE")) {
+                    if (position < words.size() && Text.upper(words.get(position)).equals("IS")) {
+                        position++;
+                    }
+                    String usageWord = wordAt(words, position);
+                    if (!Text.upper(usageWord).equals("DISPLAY")) {
+                        throw invalidOperand(index, "USAGE", usageWord);
+                    }
+                    position++;
+                }
+            } else if (normalized.equals("VALUE")) {
+                if (sawValue) {
+                    throw unexpected(index, keyword);
+                }
+                sawValue = true;
+                position++;
+
+                if (position < words.size() && Text.upper(words.get(position)).equals("IS")) {
+                    position++;
+                }
+                String valueWord = wordAt(words, position);
+                if (!isValueOperand(valueWord)) {
+                    throw invalidOperand(index, "VALUE", valueWord);
+                }
+                position++;
             } else {
                 throw unexpected(index, keyword);
             }
         }
 
         return new Entry(index, level, name, pic, occurs, redefines);
+    }
+
+    private static boolean isValueOperand(String text) {
+        String normalized = Text.upper(text);
+        if (normalized.equals("SPACE") || normalized.equals("SPACES") || normalized.equals("ZERO")
+                || normalized.equals("ZEROS") || normalized.equals("ZEROES")) {
+            return true;
+        }
+        if (text.length() >= 2) {
+            char first = text.charAt(0);
+            if ((first == '\'' || first == '"') && text.charAt(text.length() - 1) == first) {
+                return true;
+            }
+        }
+
+        int start = !text.isEmpty() && (text.charAt(0) == '+' || text.charAt(0) == '-') ? 1 : 0;
+        int digits = 0;
+        int periods = 0;
+        for (int index = start; index < text.length(); index++) {
+            char character = text.charAt(index);
+            if (character >= '0' && character <= '9') {
+                digits++;
+            } else if (character == '.') {
+                periods++;
+            } else {
+                return false;
+            }
+        }
+        return digits >= 1 && periods <= 1;
     }
 
     private static String wordAt(List<String> words, int position) {
