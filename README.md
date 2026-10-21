@@ -69,6 +69,8 @@ record      15 -> 17
 
 A layout is copybook-like text with numbered levels, names and clauses such as `PIC`, `OCCURS` and `REDEFINES`. Pictures use `X` for alphanumeric fields and `9` with an optional `V` for numeric fields. Groups contain child entries, occurrences repeat a field or group, and redefining entries provide alternate views over the same columns.
 
+Copybooks often carry two more clauses, and recmill reads them without acting on them: `USAGE IS DISPLAY` (also `USAGE DISPLAY` or just `DISPLAY`), which is the only usage that recmill supports, and `VALUE [IS] operand`, where the operand is a number such as `0` or `-12.50`, `SPACE`, `SPACES`, `ZERO`, `ZEROS`, `ZEROES` or a literal in single or double quotes (a literal may hold spaces and periods; a doubled quote stands for one quote). A value never changes how a record is decoded, encoded or checked.
+
 ## Commands
 
 `layout` lists field paths and their one-based columns; use `--groups` to include groups.
