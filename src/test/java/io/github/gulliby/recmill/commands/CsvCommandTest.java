@@ -124,7 +124,7 @@ class CsvCommandTest {
     @Test
     void validatesCsvOptionsBeforeArityAndDoesNotReadOnArgumentFailures() {
         // AC-005: CSV `[]`.
-        assertArgumentFailure("usage: recmill csv [--no-header] LAYOUT [NAME...]",
+        assertArgumentFailure("usage: recmill csv [--no-header] [--limit N] LAYOUT [NAME...]",
                 List.of(), new byte[0]);
         // AC-005: CSV `["--no-header=1"]`.
         assertArgumentFailure("--no-header takes no value",
@@ -183,7 +183,7 @@ class CsvCommandTest {
     void checksDecodeArgumentPrecedenceBeforeReadingInput() {
         // AC-005: Decode [].
         assertDecodeArgumentFailure(
-                "usage: recmill decode LAYOUT [NAME...]", List.of(), new byte[0]);
+                "usage: recmill decode [--limit N] LAYOUT [NAME...]", List.of(), new byte[0]);
         // AC-005: Decode ["--help"].
         assertDecodeArgumentFailure(
                 "unknown option \"--help\"", List.of("--help"), new byte[0]);

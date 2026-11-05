@@ -124,7 +124,7 @@ class DecodeCommandTest {
     @Test
     void rejectsMissingLayoutOperandBeforeReadingInput() {
         assertFailure(
-                "usage: recmill decode LAYOUT [NAME...]",
+                "usage: recmill decode [--limit N] LAYOUT [NAME...]",
                 List.of(),
                 utf8("A"),
                 0);

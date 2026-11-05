@@ -31,6 +31,10 @@ public final class Records {
         return List.copyOf(records);
     }
 
+    public static List<Line> first(List<Line> lines, int limit) {
+        return List.copyOf(lines.subList(0, Math.min(limit, lines.size())));
+    }
+
     public static String problem(String text, int length) {
         int column = 1;
         for (int offset = 0; offset < text.length(); column++) {

@@ -23,9 +23,9 @@ class CliTest {
     private static final String EXPECTED_USAGE =
             "recmill layout [--groups] LAYOUT\n"
                     + "recmill find LAYOUT COLUMN\n"
-                    + "recmill decode LAYOUT [NAME...]\n"
+                    + "recmill decode [--limit N] LAYOUT [NAME...]\n"
                     + "recmill encode LAYOUT [NAME...]\n"
-                    + "recmill csv [--no-header] LAYOUT [NAME...]\n"
+                    + "recmill csv [--no-header] [--limit N] LAYOUT [NAME...]\n"
                     + "recmill validate [--max MAX] LAYOUT [NAME...]\n"
                     + "recmill profile LAYOUT [NAME...]\n"
                     + "recmill diff LAYOUT1 LAYOUT2";
