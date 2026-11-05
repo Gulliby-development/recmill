@@ -28,9 +28,9 @@ class MainTest {
     private static final String USAGE = """
             recmill layout [--groups] LAYOUT
             recmill find LAYOUT COLUMN
-            recmill decode LAYOUT [NAME...]
+            recmill decode [--limit N] LAYOUT [NAME...]
             recmill encode LAYOUT [NAME...]
-            recmill csv [--no-header] LAYOUT [NAME...]
+            recmill csv [--no-header] [--limit N] LAYOUT [NAME...]
             recmill validate [--max MAX] LAYOUT [NAME...]
             recmill profile LAYOUT [NAME...]
             recmill diff LAYOUT1 LAYOUT2""";

@@ -21,9 +21,9 @@ The command-line forms are:
 ```text
 recmill layout [--groups] LAYOUT
 recmill find LAYOUT COLUMN
-recmill decode LAYOUT [NAME...]
+recmill decode [--limit N] LAYOUT [NAME...]
 recmill encode LAYOUT [NAME...]
-recmill csv [--no-header] LAYOUT [NAME...]
+recmill csv [--no-header] [--limit N] LAYOUT [NAME...]
 recmill validate [--max MAX] LAYOUT [NAME...]
 recmill profile LAYOUT [NAME...]
 recmill diff LAYOUT1 LAYOUT2
@@ -88,6 +88,8 @@ Copybooks often carry two more clauses, and recmill reads them without acting on
 `profile` summarizes blanks, invalid values, distinct values and value ranges.
 
 `diff` compares fields and record lengths in two layouts.
+
+`--limit N` (an integer from 1 to 999999, `decode` and `csv` only; `--limit=N` is also accepted) makes `decode` and `csv` read only the first N records of the input, counting the non-empty lines. The records after them are not checked, so a bad record after the limit is not an error, and a `csv` header is still printed. The value follows the rules of `--max`: no sign, no leading zero and at most six digits.
 
 ## Exit codes
 

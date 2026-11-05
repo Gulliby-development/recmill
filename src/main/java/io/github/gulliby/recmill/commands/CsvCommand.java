@@ -12,13 +12,17 @@ import io.github.gulliby.recmill.records.Records;
 import java.util.List;
 
 public final class CsvCommand {
-    public static final String USAGE = "recmill csv [--no-header] LAYOUT [NAME...]";
+    public static final String USAGE = "recmill csv [--no-header] [--limit N] LAYOUT [NAME...]";
+
+    private static final List<Options.Spec> OPTIONS = List.of(
+            Options.Spec.flag("--no-header"),
+            Options.Spec.integer("--limit", 1, 999999, Integer.MAX_VALUE));
 
     private CsvCommand() {
     }
 
     public static int run(List<String> args, Io io) {
-        Options.Parsed parsed = Options.parse(args, List.of(Options.Spec.flag("--no-header")));
+        Options.Parsed parsed = Options.parse(args, OPTIONS);
         if (parsed.args().isEmpty()) {
             throw new Failure("usage: " + USAGE);
         }
@@ -27,7 +31,9 @@ public final class CsvCommand {
         Layout layout = Layout.build(operands.get(0));
         List<Slot> slots = Selection.select(layout, operands.subList(1, operands.size()));
         List<Slot> fields = Selection.fields(slots);
-        List<List<Decoder.Value>> records = Decoder.decode(layout, slots, Records.read(io));
+        int limit = parsed.values().get("--limit");
+        List<List<Decoder.Value>> records =
+                Decoder.decode(layout, slots, Records.first(Records.read(io), limit));
 
         StringBuilder output = new StringBuilder();
         if (parsed.values().get("--no-header") == 0) {
